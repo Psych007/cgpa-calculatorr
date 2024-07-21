@@ -1,4 +1,5 @@
 import streamlit as st
+from typing import List
 
 st.set_page_config(
     page_title="CGPA Calculator",
@@ -12,7 +13,6 @@ st.set_page_config(
     },
 )
 
-
 grade_to_point = {
     "O": 10,
     "A+": 9,
@@ -23,17 +23,15 @@ grade_to_point = {
 }
 grades = list(grade_to_point.keys())
 
-
 def calculate_cgpa(
-    grade_points: list[int],
-    credits: list[float],
+    grade_points: List[int],
+    credits: List[float],
     previous_cgpa: float = 0,
     previous_credit: float = 0,
 ):
-    total_credit = sum(credit) + previous_credit
+    total_credit = sum(credits) + previous_credit
     total_grade = sum(grade_point * credit for grade_point, credit in zip(grade_points, credits)) + (previous_cgpa * previous_credit)
     return total_grade / total_credit
-
 
 st.title("CGPA Calculator")
 
@@ -46,14 +44,14 @@ st.latex(r"CGPA = \frac{\sum_{i=1}^{n} (grade_i * credit_i)}{\sum_{i=1}^{n} cred
 cols = st.columns(2)
 previous_cgpa = cols[0].number_input(
     label="Previous CGPA",
-    help="Enter Your CGPA upto previous semester",
+    help="Enter Your CGPA up to previous semester",
     min_value=0.00,
     value=0.00,
     step=0.01,
 )
 previous_credit = cols[1].number_input(
     label="Previous Credit",
-    help="Enter the total number of credits you have taken upto previous semester",
+    help="Enter the total number of credits you have taken up to the previous semester",
     min_value=0.0,
     value=0.0,
     step=0.5,
@@ -93,6 +91,5 @@ if st.button("Calculate"):
     st.success(
         f"Your Cumulative GPA is {calculate_cgpa(grade_points, credit, previous_cgpa, previous_credit):.2f}"
     )
-
 
 st.markdown("Made with ❤️ by [Siddhesh Agarwal](https://github.com/Siddhesh-Agarwal)")
